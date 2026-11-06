@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>SVG Fan-App</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a1f44">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SVG Fans">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--navy:#0a1f44;--navy2:#12306a;--blue:#2f7bff;--sky:#8cc0ff;--bg:#f2f6fc;--card:#fff;--tx:#0d1b33;--mu:#5d6b85;--bd:#dfe7f3;--ok:#1fa35c;--red:#e5484d;--gold:#f5b82e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px}
+body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
+button{font:inherit;cursor:pointer}
+.hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 70%,#1b4fb3 100%);color:#fff;padding:calc(env(safe-area-inset-top) + 18px) 18px 74px;border-radius:0 0 30px 30px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07)}
+.brand{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.brand .logo{height:72px;width:auto;flex:none;background:#fff;border-radius:16px;padding:7px;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.brand h1{margin:0;font-size:25px;line-height:1.1;letter-spacing:-.3px}
+.brand p{margin:3px 0 0;color:var(--sky);font-size:14px}
+main{margin-top:-52px;padding:0 14px;position:relative;z-index:2}
+.card{background:var(--card);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 6px 22px rgba(10,31,68,.09)}
+.card h2{margin:0 0 10px;font-size:18px}
+.lbl{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--mu);font-weight:700;margin-bottom:6px}
+.big{font-size:44px;font-weight:800;letter-spacing:-1px;line-height:1}
+.row{display:flex;align-items:center;gap:12px}
+.grow{flex:1}
+.pill{display:inline-block;background:#e8f0ff;color:var(--navy2);font-size:12.5px;font-weight:700;padding:5px 10px;border-radius:20px}
+.pill.g{background:#e3f6ea;color:#17784a}.pill.y{background:#fff3d6;color:#8a6200}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--bg);border-radius:14px;padding:12px 8px;text-align:center}
+.stat b{display:block;font-size:24px}
+.stat span{font-size:12px;color:var(--mu)}
+.note{font-size:13px;color:var(--mu);line-height:1.4;margin-top:10px}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:14px;font-weight:700;font-size:16px;color:#fff;background:linear-gradient(135deg,var(--blue),#1b57d6);margin-top:10px;text-align:center;text-decoration:none}
+.btn.sec{background:#e8f0ff;color:var(--navy2)}
+.btn.red{background:var(--red)}
+.btn.sm{padding:10px;font-size:14.5px;margin-top:0}
+input,select{width:100%;font:inherit;padding:12px;border:2px solid var(--bd);border-radius:12px;background:#fff;color:var(--tx);margin-bottom:8px}
+input:focus,select:focus{outline:none;border-color:var(--blue)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.match{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bd)}
+.match:last-child{border-bottom:0}
+.match .d{width:54px;text-align:center;background:var(--bg);border-radius:12px;padding:6px 0;font-size:12px;color:var(--mu);line-height:1.2}
+.match .d b{display:block;font-size:20px;color:var(--tx)}
+.match .t{flex:1;min-width:0}
+.match .t b{display:block}
+.match .t small{color:var(--mu)}
+.sc{font-weight:800;font-size:18px;padding:6px 12px;border-radius:10px;background:var(--bg)}
+.sc.w{background:#e3f6ea;color:#17784a}.sc.l{background:#fde7e8;color:#b3262b}.sc.dr{background:#fff3d6;color:#8a6200}
+.x{border:0;background:none;color:var(--mu);font-size:20px;padding:4px 8px}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;text-align:center}
+.cd div{background:rgba(255,255,255,.14);border-radius:12px;padding:10px 4px}
+.cd b{display:block;font-size:24px}
+.cd span{font-size:11px;opacity:.8}
+.next{background:linear-gradient(150deg,var(--navy),var(--navy2));color:#fff}
+.next .lbl{color:var(--sky)}
+.goal{border:0;width:100%;border-radius:22px;padding:26px 10px;background:linear-gradient(140deg,#1b57d6,#2f7bff);color:#fff;font-size:24px;font-weight:800;box-shadow:0 8px 20px rgba(47,123,255,.4);transition:transform .08s}
+.goal:active{transform:scale(.97)}
+.goal small{display:block;font-size:14px;font-weight:500;opacity:.85;margin-top:4px}
+.opt{display:block;width:100%;text-align:left;border:2px solid var(--bd);background:#fff;border-radius:14px;padding:14px;margin-bottom:9px;font-size:16.5px;color:var(--tx)}
+.opt.ok{border-color:var(--ok);background:#e3f6ea}.opt.no{border-color:var(--red);background:#fde7e8}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0 12px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--sky));border-radius:6px}
+.tl{border-left:3px solid var(--bd);margin-left:6px;padding-left:14px}
+.tl p{margin:0 0 14px;line-height:1.4}
+.tl b{color:var(--navy2)}
+.link{display:flex;align-items:center;gap:12px;padding:14px;margin-bottom:9px;border-radius:14px;background:var(--bg);color:var(--tx);text-decoration:none;font-weight:600}
+.link small{display:block;color:var(--mu);font-weight:400;font-size:13px}
+.link .e{font-size:24px}
+nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--bd);display:flex;padding:6px 6px calc(env(safe-area-inset-bottom) + 6px);z-index:10}
+nav button{flex:1;border:0;background:none;color:var(--mu);padding:7px 2px;font-size:11.5px;font-weight:600;border-radius:12px}
+nav button span{display:block;font-size:22px;margin-bottom:1px}
+nav button.on{color:var(--blue)}
+.toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 18px;border-radius:22px;font-size:15px;opacity:0;pointer-events:none;transition:.25s;z-index:30;max-width:90%;text-align:center}
+.toast.show{opacity:1}
+.hide{display:none}
+@media(prefers-color-scheme:dark){
+:root{--bg:#09111f;--card:#131f36;--tx:#e8eefb;--mu:#8fa0bf;--bd:#233252}
+.pill{background:#1b2d52;color:var(--sky)}.pill.g{background:#12352a;color:#6fe0a4}.pill.y{background:#3a2f12;color:#f5d27a}
+.btn.sec{background:#1b2d52;color:var(--sky)}
+input,select{background:#0d172b}
+.opt{background:#0d172b}.opt.ok{background:#12352a}.opt.no{background:#3a1a1c}
+nav{background:rgba(13,23,43,.94)}
+.sc.w{background:#12352a;color:#6fe0a4}.sc.l{background:#3a1a1c;color:#ff9a9d}.sc.dr{background:#3a2f12;color:#f5d27a}
+}
+</style>
+</head>
+<body>
+<div class="hero"><div class="brand">
+<img class="logo" src="logo.png" alt="SV Gallneukirchen Wappen">
+<div><h1>SV Gallneukirchen</h1><p>Inoffizielle Fan-App · Landesliga Ost</p></div></div></div>
+<main id="main"></main>
+<nav id="nav"></nav>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+const KEY="svg_v1";
+function fresh(){return {games:[],goals:0,tip:{},quiz:{best:0,runs:0}}}
+let S=fresh();
+try{const o=JSON.parse(localStorage.getItem(KEY)||"null");if(o&&typeof o==="object"){S.games=Array.isArray(o.games)?o.games:[];S.goals=+o.goals||0;S.tip=(o.tip&&typeof o.tip==="object")?o.tip:{};S.quiz=(o.quiz&&typeof o.quiz==="object")?{best:+o.quiz.best||0,runs:+o.quiz.runs||0}:{best:0,runs:0}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const $=s=>document.querySelector(s);
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),1800)}
+const TABS=[["home","🏠","Start"],["games","📅","Spiele"],["fan","🔥","Fans"],["club","🛡️","Verein"],["links","🔗","Live"]];
+let tab="home",timer=null;
+/* ===== Fakten (Stand 12.10.2026) ===== */
+const FACTS={pts:19,rounds:11,asof:"12.10.2026",next:"ASKÖ Oedt",nextNote:"ungeschlagener Tabellenführer"};
+const QUIZ=[
+["In welchem Jahr wurde der SV Gallneukirchen gegründet?","1948",["1925","1961","1975"],"Der Verein wurde 1948 gegründet und feierte 2018 sein 70-jähriges Bestehen."],
+["Was sind die Vereinsfarben?","Blau-Weiß",["Rot-Weiß","Grün-Gelb","Schwarz-Weiß"],"Der SVG spielt in Blau-Weiß."],
+["In welcher Liga spielt die Kampfmannschaft?","Landesliga Ost (OÖ)",["Regionalliga Mitte","Bezirksliga Nord","Bundesliga"],"Die Kampfmannschaft spielt in der oberösterreichischen Landesliga Ost."],
+["Wie lautet der Spitzname des Vereins?","Galli",["Falken","Raben","Bullen"],"In den Medien heißt der Klub oft „Galli“, die Spieler „Gallier“."],
+["Wer ist der Trainer der Kampfmannschaft?","Mike Mehlem",["Peter Stöger","Franco Foda","Karl Daxbacher"],"Mike (Michael) Mehlem trainiert das Team."],
+["Wer gewann für den SVG zwei Paralympics-Titel im Judo?","Walter Hanl",["Thomas Muster","Marcel Hirscher","Felix Gottwald"],"Walter Hanl holte Gold 1996 in Atlanta und 2000 in Sydney."],
+["Wie viele Mitglieder hat der Verein ungefähr?","Rund 1.500",["Rund 150","Rund 400","Rund 12.000"],"Der SVG gilt als größter Sportverein im Mühlviertel."],
+["In welcher Region liegt Gallneukirchen?","Mühlviertel",["Salzkammergut","Innviertel","Pinzgau"],"Gallneukirchen liegt im Mühlviertel in Oberösterreich (Bezirk Urfahr-Umgebung)."]
+];
+/* ===== Views ===== */
+function days(d){return Math.round((new Date(d+"T12:00:00")-new Date())/864e5)}
+function fmt(d){const x=new Date(d+"T12:00:00");return [x.getDate(),["Jän","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"][x.getMonth()]]}
+function sorted(){return S.games.slice().sort((a,b)=>(a.d+(a.t||"")).localeCompare(b.d+(b.t||"")))}
+function nextGame(){const n=new Date();const k=n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0");return sorted().find(g=>(g.hs==null)&&g.d>=k)||null}
+function res(g){if(g.hs==null)return"";const my=g.home?g.hs:g.as,op=g.home?g.as:g.hs;return my>op?"w":my<op?"l":"dr"}
+function homeView(){
+ const g=nextGame();
+ let h='<div class="card next"><div class="lbl">Nächstes Spiel</div>';
+ if(g){h+='<div style="font-size:22px;font-weight:800">'+(g.home?"SVG – "+esc(g.o):esc(g.o)+" – SVG")+'</div><div style="opacity:.8;font-size:14px;margin-top:2px">'+fmt(g.d).join(". ")+(g.t?" · "+esc(g.t)+" Uhr":"")+(g.home?" · Heimspiel":" · Auswärts")+'</div><div class="cd" id="cd"></div>'}
+ else h+='<div style="font-size:20px;font-weight:800">'+esc(FACTS.next)+'</div><div style="opacity:.8;font-size:14px;margin:2px 0 10px">Letzter bekannter Gegner ('+esc(FACTS.nextNote)+', Stand '+FACTS.asof+'). Trage unter „Spiele“ deinen Termin ein, dann läuft hier der Countdown.</div><button class="btn sm sec" data-a="tab" data-t="games">Spiel eintragen</button>';
+ h+='</div>';
+ h+='<div class="card"><div class="lbl">Saison 2026/27 · Landesliga Ost</div><div class="row"><div class="big">'+FACTS.pts+'</div><div class="grow"><b>Punkte</b><br><span style="color:var(--mu);font-size:14px">nach '+FACTS.rounds+' Runden</span></div></div><div class="note">Stand: '+FACTS.asof+' (laut Presseberichten). Die aktuelle Tabelle findest du unter „Live“.</div></div>';
+ const done=sorted().filter(x=>x.hs!=null);
+ let w=0,d=0,l=0;done.forEach(x=>{const r=res(x);if(r==="w")w++;else if(r==="l")l++;else d++});
+ h+='<div class="card"><h2>Meine Bilanz</h2><div class="stats"><div class="stat"><b style="color:var(--ok)">'+w+'</b><span>Siege</span></div><div class="stat"><b style="color:var(--gold)">'+d+'</b><span>Remis</span></div><div class="stat"><b style="color:var(--red)">'+l+'</b><span>Niederlagen</span></div></div><div class="note">Zählt nur Spiele, die du selbst unter „Spiele“ eingetragen hast.</div></div>';
+ h+='<div class="card"><h2>⚽ Letzte bekannte Partie</h2><div class="match"><div class="t"><b>2:1-Comeback nach 0:1</b><small>Tore: Burak Katar (78.), Noah Alexander (89.)</small></div><span class="sc w">2:1</span></div><div class="note">Quelle: Presseberichte, Stand '+FACTS.asof+'.</div></div>';
+ return h;
+}
+function gamesView(){
+ let h='<div class="card"><h2>Spiel eintragen</h2><input id="go" placeholder="Gegner (z. B. ASKÖ Oedt)" maxlength="40"><div class="two"><input id="gd" type="date"><input id="gt" type="time"></div><select id="gh"><option value="1">Heimspiel</option><option value="0">Auswärtsspiel</option></select><button class="btn" data-a="addg">Hinzufügen</button><div class="note">Termine und Ergebnisse trägst du selbst ein und sie bleiben auf deinem Gerät. Den offiziellen Spielplan findest du unter „Live“.</div></div>';
+ const L=sorted();
+ h+='<div class="card"><h2>Mein Spielplan</h2>';
+ if(!L.length)h+='<div class="note">Noch nichts eingetragen.</div>';
+ L.forEach(g=>{
+  const i=S.games.indexOf(g),dt=fmt(g.d);
+  h+='<div class="match"><div class="d"><b>'+dt[0]+'</b>'+dt[1]+'</div><div class="t"><b>'+(g.home?"SVG – "+esc(g.o):esc(g.o)+" – SVG")+'</b><small>'+(g.t?esc(g.t)+" Uhr · ":"")+(g.home?"Heim":"Auswärts")+'</small></div>';
+  if(g.hs!=null)h+='<span class="sc '+res(g)+'">'+g.hs+':'+g.as+'</span>';
+  else h+='<button class="btn sm sec" style="width:auto;padding:8px 10px" data-a="resg" data-i="'+i+'">Ergebnis</button>';
+  h+='<button class="x" data-a="delg" data-i="'+i+'" aria-label="Löschen">✕</button></div>';
+ });
+ return h+'</div>';
+}
+function fanView(){
+ let h='<div class="card" style="text-align:center"><div class="lbl">Torjubel-Zähler</div><div class="big" id="gc">'+S.goals+'</div><div class="note" style="margin:6px 0 14px">Wie oft hast du in dieser Saison gejubelt?</div><button class="goal" data-a="goal">⚽ TOOOOR!<small>Tippen, wenn der SVG trifft</small></button><button class="btn sm sec" style="margin-top:10px" data-a="goalr">Zähler zurücksetzen</button></div>';
+ h+='<div class="card"><h2>🎯 Ergebnis-Tipp</h2>';
+ const g=nextGame();
+ if(g){const k=g.d+g.o,t=S.tip[k];h+='<div class="note" style="margin:0 0 8px">'+(g.home?"SVG – "+esc(g.o):esc(g.o)+" – SVG")+'</div><div class="two"><input id="t1" type="number" min="0" max="20" inputmode="numeric" placeholder="SVG" value="'+(t?t.a:"")+'"><input id="t2" type="number" min="0" max="20" inputmode="numeric" placeholder="'+esc(g.o)+'" value="'+(t?t.b:"")+'"></div><button class="btn" data-a="tip">Tipp speichern</button>'}
+ else h+='<div class="note">Trage unter „Spiele“ ein nächstes Spiel ein, dann kannst du hier tippen.</div>';
+ h+='</div>';
+ h+='<div class="card"><h2>🧠 Fan-Quiz</h2><div class="note" style="margin:0 0 10px">8 Fragen zum Verein. Bestes Ergebnis: <b>'+S.quiz.best+'/'+QUIZ.length+'</b></div><button class="btn" data-a="quiz">Quiz starten</button></div>';
+ return h;
+}
+let QS=null;
+function quizView(){
+ const q=QS.q[QS.i];
+ let h='<div class="card"><div class="row"><span class="pill">Frage '+(QS.i+1)+'/'+QUIZ.length+'</span><span class="grow"></span><span class="pill g">'+QS.s+' Punkte</span></div><div class="bar"><i style="width:'+(QS.i/QUIZ.length*100)+'%"></i></div><h2 style="font-size:20px;line-height:1.3">'+esc(q.q)+'</h2>';
+ q.o.forEach((o,j)=>{let c="opt";if(QS.a!==null){if(j===q.c)c+=" ok";else if(j===QS.a)c+=" no"}h+='<button class="'+c+'" data-a="qp" data-j="'+j+'">'+esc(o)+'</button>'});
+ if(QS.a!==null)h+='<div class="note" style="font-size:14.5px">'+esc(q.e)+'</div><button class="btn" data-a="qn">'+(QS.i+1<QUIZ.length?"Weiter":"Ergebnis ansehen")+'</button>';
+ return h+'</div>';
+}
+function quizEnd(){
+ const pct=QS.s/QUIZ.length;
+ const t=pct===1?"Vereinslegende! 🏆":pct>=.7?"Echter Fan! 💙":pct>=.4?"Guter Anfang 👍":"Zeit für ein Heimspiel! 😄";
+ return '<div class="card" style="text-align:center"><div class="lbl">Ergebnis</div><div class="big">'+QS.s+'/'+QUIZ.length+'</div><h2 style="margin:12px 0">'+t+'</h2><button class="btn" data-a="quiz">Nochmal spielen</button><button class="btn sec" data-a="tab" data-t="fan">Zurück</button></div>';
+}
+function clubView(){
+ return '<div class="card"><h2>Der Verein</h2><div class="tl"><p><b>1948</b><br>Gründung des SV Gallneukirchen aus dem damals bestehenden Fußballverein.</p><p><b>Heute</b><br>Größter Sportverein im Mühlviertel mit rund 1.500 Mitgliedern. Die Vereinsfarben sind Blau-Weiß.</p><p><b>2018</b><br>70-Jahr-Feier mit einem Testspiel gegen den LASK.</p><p><b>Kampfmannschaft</b><br>Landesliga Ost (Oberösterreich), Trainer: Mike Mehlem.</p></div></div>'+
+ '<div class="card"><h2>🏅 Erfolge aus dem Verein</h2><div class="tl"><p><b>Walter Hanl</b><br>Zwei Paralympics-Siege im Judo (Atlanta 1996, Sydney 2000).</p><p><b>Johannes Enzenhofer</b><br>Triathlon bei den Olympischen Spielen in Sydney 2000.</p><p><b>Tanzer, Weißengruber, Reichör</b><br>Mehrere Duathlon-Welt- und Europameistertitel.</p><p><b>Alexandra Lichtl</b><br>Erste Frau an der Vereinsspitze in der Geschichte des SVG.</p></div><div class="note">Judo und Schwimmen zählten zu den besten Sektionen Österreichs.</div></div>'+
+ '<div class="card"><h2>Hinweis</h2><div class="note" style="margin:0">Dies ist eine <b>inoffizielle Fan-App</b> und steht in keiner Verbindung zum SV Gallneukirchen, zur Liga oder zum ÖFB. Das Vereinswappen wird mit Bezug zum Verein verwendet. Alle Angaben nach bestem Wissen aus öffentlichen Quellen, Stand '+FACTS.asof+'.</div></div>';
+}
+function linksView(){
+ const L=[["🏠","Offizielle Vereinsseite","vereine.oefb.at · News & Infos","https://vereine.oefb.at/SVGallneukirchen/"],["📊","Tabelle & Ergebnisse","Landesliga Ost · LigaPortal","https://ticker.ligaportal.at/mannschaft/81/sv-gallneukirchen/tabelle"],["📰","Neuigkeiten zum SVG","meinbezirk.at","https://www.meinbezirk.at/tag/sv-gallneukirchen"],["🗺️","Gallneukirchen auf der Karte","Anfahrt zum Heimspiel","https://www.google.com/maps/search/?api=1&query=SV+Gallneukirchen+Sportplatz"]];
+ return '<div class="card"><h2>Live-Infos</h2><div class="note" style="margin:0 0 12px">Aktuelle Tabelle, Spielplan und News findest du immer bei den offiziellen Quellen:</div>'+L.map(x=>'<a class="link" href="'+x[3]+'" target="_blank" rel="noopener"><span class="e">'+x[0]+'</span><span>'+x[1]+'<small>'+x[2]+'</small></span></a>').join("")+'</div>';
+}
+function render(){
+ clearInterval(timer);
+ const v=QS&&tab==="quiz"?(QS.done?quizEnd():quizView()):{home:homeView,games:gamesView,fan:fanView,club:clubView,links:linksView}[tab]();
+ $("#main").innerHTML=v;
+ $("#nav").innerHTML=TABS.map(t=>'<button class="'+(t[0]===tab||(tab==="quiz"&&t[0]==="fan")?"on":"")+'" data-a="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span>'+t[2]+'</button>').join("");
+ if($("#cd")){tick();timer=setInterval(tick,1000)}
+}
+function tick(){
+ const g=nextGame(),el=$("#cd");if(!g||!el)return;
+ const t=new Date(g.d+"T"+(g.t||"15:00")+":00")-new Date();
+ if(t<=0){el.innerHTML='<div style="grid-column:1/-1"><b>Anpfiff! ⚽</b></div>';return}
+ const d=Math.floor(t/864e5),h=Math.floor(t%864e5/36e5),m=Math.floor(t%36e5/6e4),s=Math.floor(t%6e4/1e3);
+ el.innerHTML=[[d,"Tage"],[h,"Std"],[m,"Min"],[s,"Sek"]].map(x=>'<div><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join("");
+}
+/* ===== Events ===== */
+document.addEventListener("click",function(e){
+ const t=e.target.closest("[data-a]");if(!t)return;
+ const d=t.dataset;
+ switch(d.a){
+  case "tab":if(d.t!=="fan"||tab!=="quiz"){QS=null}tab=d.t;render();window.scrollTo(0,0);break;
+  case "addg":{const o=$("#go").value.trim(),dt=$("#gd").value;if(!o||!dt){toast("Bitte Gegner und Datum eintragen");return}S.games.push({o:o,d:dt,t:$("#gt").value||"",home:$("#gh").value==="1",hs:null,as:null});save();render();toast("Spiel gespeichert");break}
+  case "delg":if(confirm("Spiel löschen?")){S.games.splice(+d.i,1);save();render()}break;
+  case "resg":{const g=S.games[+d.i];const r=prompt("Ergebnis aus Sicht SVG, z. B. 2:1");if(r===null)return;const m=r.match(/^\s*(\d{1,2})\s*[:\-]\s*(\d{1,2})\s*$/);if(!m){toast("Bitte so eingeben: 2:1");return}g.hs=g.home?+m[1]:+m[2];g.as=g.home?+m[2]:+m[1];save();render();break}
+  case "goal":S.goals++;save();$("#gc").textContent=S.goals;if(navigator.vibrate)navigator.vibrate(40);toast(["TOOOOR! 💙","Jaaaa! ⚽","Gallier-Jubel! 🔥"][S.goals%3]);break;
+  case "goalr":if(confirm("Zähler wirklich zurücksetzen?")){S.goals=0;save();render()}break;
+  case "tip":{const g=nextGame();if(!g)return;const a=$("#t1").value,b=$("#t2").value;if(a===""||b===""){toast("Bitte beide Zahlen eintragen");return}S.tip[g.d+g.o]={a:+a,b:+b};save();toast("Tipp gespeichert: "+a+":"+b);break}
+  case "quiz":{const qs=QUIZ.map(function(q){const o=[q[1]].concat(q[2]);const idx=o.map((_,i)=>i).sort(()=>Math.random()-.5);return {q:q[0],o:idx.map(i=>o[i]),c:idx.indexOf(0),e:q[3]}}).sort(()=>Math.random()-.5);QS={q:qs,i:0,s:0,a:null,done:false};tab="quiz";render();window.scrollTo(0,0);break}
+  case "qp":if(QS.a===null){QS.a=+d.j;if(QS.a===QS.q[QS.i].c)QS.s++;render()}break;
+  case "qn":QS.i++;QS.a=null;if(QS.i>=QUIZ.length){QS.done=true;S.quiz.runs++;if(QS.s>S.quiz.best)S.quiz.best=QS.s;save()}render();window.scrollTo(0,0);break;
+ }
+});
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});
+render();
+</script>
+</body>
+</html>
