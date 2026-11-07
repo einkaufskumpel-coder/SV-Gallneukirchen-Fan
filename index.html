@@ -80,6 +80,12 @@ nav button span{display:block;font-size:22px;margin-bottom:1px}
 nav button.on{color:var(--blue)}
 .toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 18px;border-radius:22px;font-size:15px;opacity:0;pointer-events:none;transition:.25s;z-index:30;max-width:90%;text-align:center}
 .toast.show{opacity:1}
+.pl{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.pl b{flex:1;font-weight:600}
+.pl small{color:var(--mu)}
+.pn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#1b57d6);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.pn.ini{font-size:14px;background:var(--navy2)}
+#ksearch{margin-bottom:6px}
 .hide{display:none}
 @media(prefers-color-scheme:dark){
 :root{--bg:#09111f;--card:#131f36;--tx:#e8eefb;--mu:#8fa0bf;--bd:#233252}
@@ -109,7 +115,7 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 const $=s=>document.querySelector(s);
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),1800)}
-const TABS=[["home","🏠","Start"],["games","📅","Spiele"],["fan","🔥","Fans"],["club","🛡️","Verein"],["links","🔗","Live"]];
+const TABS=[["home","🏠","Start"],["games","📅","Spiele"],["squad","👥","Kader"],["fan","🔥","Fans"],["club","🛡️","Verein"],["links","🔗","Live"]];
 let tab="home",timer=null;
 /* ===== Fakten (Stand 12.10.2026) ===== */
 const FACTS={pts:19,rounds:11,asof:"12.10.2026",next:"ASKÖ Oedt",nextNote:"ungeschlagener Tabellenführer"};
@@ -118,11 +124,28 @@ const QUIZ=[
 ["Was sind die Vereinsfarben?","Blau-Weiß",["Rot-Weiß","Grün-Gelb","Schwarz-Weiß"],"Der SVG spielt in Blau-Weiß."],
 ["In welcher Liga spielt die Kampfmannschaft?","Landesliga Ost (OÖ)",["Regionalliga Mitte","Bezirksliga Nord","Bundesliga"],"Die Kampfmannschaft spielt in der oberösterreichischen Landesliga Ost."],
 ["Wie lautet der Spitzname des Vereins?","Galli",["Falken","Raben","Bullen"],"In den Medien heißt der Klub oft „Galli“, die Spieler „Gallier“."],
-["Wer ist der Trainer der Kampfmannschaft?","Mike Mehlem",["Peter Stöger","Franco Foda","Karl Daxbacher"],"Mike (Michael) Mehlem trainiert das Team."],
+["Wer ist der Trainer der Kampfmannschaft?","Joachim Sommer",["Peter Stöger","Franco Foda","Karl Daxbacher"],"Joachim Sommer ist Trainer, Wolfram und Michael Mehlem sind Co-Trainer (Stand 07.11.2026)."],
 ["Wer gewann für den SVG zwei Paralympics-Titel im Judo?","Walter Hanl",["Thomas Muster","Marcel Hirscher","Felix Gottwald"],"Walter Hanl holte Gold 1996 in Atlanta und 2000 in Sydney."],
 ["Wie viele Mitglieder hat der Verein ungefähr?","Rund 1.500",["Rund 150","Rund 400","Rund 12.000"],"Der SVG gilt als größter Sportverein im Mühlviertel."],
 ["In welcher Region liegt Gallneukirchen?","Mühlviertel",["Salzkammergut","Innviertel","Pinzgau"],"Gallneukirchen liegt im Mühlviertel in Oberösterreich (Bezirk Urfahr-Umgebung)."]
 ];
+/* ===== Kader (Stand 07.11.2026, laut ÖFB-Vereinsdaten) ===== */
+function norm(s){return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g,"")}
+const KADER=[["Lukas Kürnsteiner",1],["Jonah Wendelin Mitter",5],["Wolfram Mehlem",7],["Peter Grabowski",8],["Jan Pschernig",10],["Noah Friedrich Alexander",11],["Fabian Pühringer",12],["Silvio Berger",15],["Sebastian Huss",18],["Marcel Edinger",19],["Okan Taskin",20],["Rene Rosenthaler",24],["Tobias Killinger",26],["Elvir Huskic",28],["Rainer Moosbauer",31],["Henrik Henzinger",31],["Vinko Klepic",34],["Tambi Elias",0],["Thomas Hackl",0],["Stefan Pirngruber",0],["Jonas Hinterreitner",0],["Theo Schwarzbauer",0],["Konstantin Puchinger",0],["Franz Michael Riener",0],["Burak Katar",0],["Niklas Killinger",0],["Elias Freudenthaler",0],["Osman Omanovic",0],["Konrad Walaszek",0]];
+const STAFF=[["Joachim Sommer","Trainer"],["Wolfram Mehlem","Co-Trainer"],["Michael Mehlem","Co-Trainer"]];
+function initials(n){const p=n.split(" ");return (p[0][0]+p[p.length-1][0]).toUpperCase()}
+function kaderList(q){
+ q=norm(q||"").trim();
+ const L=KADER.filter(function(x){return !q||norm(x[0]).indexOf(q)>=0||String(x[1])===q});
+ if(!L.length)return '<div class="note">Kein Spieler gefunden.</div>';
+ return L.map(function(x){return '<div class="pl"><span class="pn">'+(x[1]?x[1]:"–")+'</span><b>'+esc(x[0])+'</b></div>'}).join("");
+}
+function squadView(){
+ let h='<div class="card"><h2>Trainerteam</h2>'+STAFF.map(function(x){return '<div class="pl"><span class="pn ini">'+initials(x[0])+'</span><b>'+esc(x[0])+'</b><small>'+x[1]+'</small></div>'}).join("")+'</div>';
+ h+='<div class="card"><h2>Kampfmannschaft · '+KADER.length+' Spieler</h2><input id="ksearch" type="text" placeholder="Spieler oder Nummer suchen…" autocomplete="off" autocapitalize="off"><div id="klist">'+kaderList("")+'</div>';
+ h+='<div class="note">Stand: 07.11.2026 nach den ÖFB-Vereinsdaten, sortiert nach Rückennummer. Spieler ohne Nummer stehen am Ende. Die Liste kann unvollständig sein oder sich ändern. Aktuell findest du sie hier:</div><a class="btn sec sm" style="margin-top:10px;padding:12px" href="https://sv-gallneukirchen.fan.at/kader" target="_blank" rel="noopener">Offizielle Kaderseite öffnen</a></div>';
+ return h;
+}
 /* ===== Views ===== */
 function days(d){return Math.round((new Date(d+"T12:00:00")-new Date())/864e5)}
 function fmt(d){const x=new Date(d+"T12:00:00");return [x.getDate(),["Jän","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"][x.getMonth()]]}
@@ -181,7 +204,7 @@ function quizEnd(){
  return '<div class="card" style="text-align:center"><div class="lbl">Ergebnis</div><div class="big">'+QS.s+'/'+QUIZ.length+'</div><h2 style="margin:12px 0">'+t+'</h2><button class="btn" data-a="quiz">Nochmal spielen</button><button class="btn sec" data-a="tab" data-t="fan">Zurück</button></div>';
 }
 function clubView(){
- return '<div class="card"><h2>Der Verein</h2><div class="tl"><p><b>1948</b><br>Gründung des SV Gallneukirchen aus dem damals bestehenden Fußballverein.</p><p><b>Heute</b><br>Größter Sportverein im Mühlviertel mit rund 1.500 Mitgliedern. Die Vereinsfarben sind Blau-Weiß.</p><p><b>2018</b><br>70-Jahr-Feier mit einem Testspiel gegen den LASK.</p><p><b>Kampfmannschaft</b><br>Landesliga Ost (Oberösterreich), Trainer: Mike Mehlem.</p></div></div>'+
+ return '<div class="card"><h2>Der Verein</h2><div class="tl"><p><b>1948</b><br>Gründung des SV Gallneukirchen aus dem damals bestehenden Fußballverein.</p><p><b>Heute</b><br>Größter Sportverein im Mühlviertel mit rund 1.500 Mitgliedern. Die Vereinsfarben sind Blau-Weiß.</p><p><b>2018</b><br>70-Jahr-Feier mit einem Testspiel gegen den LASK.</p><p><b>Kampfmannschaft</b><br>Landesliga Ost (Oberösterreich). Trainer: Joachim Sommer, Co-Trainer: Wolfram und Michael Mehlem.</p></div></div>'+
  '<div class="card"><h2>🏅 Erfolge aus dem Verein</h2><div class="tl"><p><b>Walter Hanl</b><br>Zwei Paralympics-Siege im Judo (Atlanta 1996, Sydney 2000).</p><p><b>Johannes Enzenhofer</b><br>Triathlon bei den Olympischen Spielen in Sydney 2000.</p><p><b>Tanzer, Weißengruber, Reichör</b><br>Mehrere Duathlon-Welt- und Europameistertitel.</p><p><b>Alexandra Lichtl</b><br>Erste Frau an der Vereinsspitze in der Geschichte des SVG.</p></div><div class="note">Judo und Schwimmen zählten zu den besten Sektionen Österreichs.</div></div>'+
  '<div class="card"><h2>Hinweis</h2><div class="note" style="margin:0">Dies ist eine <b>inoffizielle Fan-App</b> und steht in keiner Verbindung zum SV Gallneukirchen, zur Liga oder zum ÖFB. Das Vereinswappen wird mit Bezug zum Verein verwendet. Alle Angaben nach bestem Wissen aus öffentlichen Quellen, Stand '+FACTS.asof+'.</div></div>'+
  '<div class="card" id="impressum"><h2>Impressum</h2><div class="note" style="margin:0;color:var(--tx);font-size:14.5px">'+
@@ -203,7 +226,7 @@ function linksView(){
 }
 function render(){
  clearInterval(timer);
- const v=QS&&tab==="quiz"?(QS.done?quizEnd():quizView()):{home:homeView,games:gamesView,fan:fanView,club:clubView,links:linksView}[tab]();
+ const v=QS&&tab==="quiz"?(QS.done?quizEnd():quizView()):{home:homeView,games:gamesView,squad:squadView,fan:fanView,club:clubView,links:linksView}[tab]();
  $("#main").innerHTML=v;
  $("#nav").innerHTML=TABS.map(t=>'<button class="'+(t[0]===tab||(tab==="quiz"&&t[0]==="fan")?"on":"")+'" data-a="tab" data-t="'+t[0]+'"><span>'+t[1]+'</span>'+t[2]+'</button>').join("");
  if($("#cd")){tick();timer=setInterval(tick,1000)}
@@ -233,6 +256,7 @@ document.addEventListener("click",function(e){
   case "qn":QS.i++;QS.a=null;if(QS.i>=QUIZ.length){QS.done=true;S.quiz.runs++;if(QS.s>S.quiz.best)S.quiz.best=QS.s;save()}render();window.scrollTo(0,0);break;
  }
 });
+document.addEventListener("input",function(e){if(e.target&&e.target.id==="ksearch"){const b=$("#klist");if(b)b.innerHTML=kaderList(e.target.value)}});
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});
 render();
 </script>
