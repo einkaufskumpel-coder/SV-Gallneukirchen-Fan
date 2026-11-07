@@ -140,6 +140,7 @@ function homeView(){
  let w=0,d=0,l=0;done.forEach(x=>{const r=res(x);if(r==="w")w++;else if(r==="l")l++;else d++});
  h+='<div class="card"><h2>Meine Bilanz</h2><div class="stats"><div class="stat"><b style="color:var(--ok)">'+w+'</b><span>Siege</span></div><div class="stat"><b style="color:var(--gold)">'+d+'</b><span>Remis</span></div><div class="stat"><b style="color:var(--red)">'+l+'</b><span>Niederlagen</span></div></div><div class="note">Zählt nur Spiele, die du selbst unter „Spiele“ eingetragen hast.</div></div>';
  h+='<div class="card"><h2>⚽ Letzte bekannte Partie</h2><div class="match"><div class="t"><b>2:1-Comeback nach 0:1</b><small>Tore: Burak Katar (78.), Noah Alexander (89.)</small></div><span class="sc w">2:1</span></div><div class="note">Quelle: Presseberichte, Stand '+FACTS.asof+'.</div></div>';
+ h+='<div style="text-align:center;margin:6px 0 10px"><button class="x" style="font-size:14px;text-decoration:underline" data-a="imp">Impressum · Datenschutz</button></div>';
  return h;
 }
 function gamesView(){
@@ -182,7 +183,19 @@ function quizEnd(){
 function clubView(){
  return '<div class="card"><h2>Der Verein</h2><div class="tl"><p><b>1948</b><br>Gründung des SV Gallneukirchen aus dem damals bestehenden Fußballverein.</p><p><b>Heute</b><br>Größter Sportverein im Mühlviertel mit rund 1.500 Mitgliedern. Die Vereinsfarben sind Blau-Weiß.</p><p><b>2018</b><br>70-Jahr-Feier mit einem Testspiel gegen den LASK.</p><p><b>Kampfmannschaft</b><br>Landesliga Ost (Oberösterreich), Trainer: Mike Mehlem.</p></div></div>'+
  '<div class="card"><h2>🏅 Erfolge aus dem Verein</h2><div class="tl"><p><b>Walter Hanl</b><br>Zwei Paralympics-Siege im Judo (Atlanta 1996, Sydney 2000).</p><p><b>Johannes Enzenhofer</b><br>Triathlon bei den Olympischen Spielen in Sydney 2000.</p><p><b>Tanzer, Weißengruber, Reichör</b><br>Mehrere Duathlon-Welt- und Europameistertitel.</p><p><b>Alexandra Lichtl</b><br>Erste Frau an der Vereinsspitze in der Geschichte des SVG.</p></div><div class="note">Judo und Schwimmen zählten zu den besten Sektionen Österreichs.</div></div>'+
- '<div class="card"><h2>Hinweis</h2><div class="note" style="margin:0">Dies ist eine <b>inoffizielle Fan-App</b> und steht in keiner Verbindung zum SV Gallneukirchen, zur Liga oder zum ÖFB. Das Vereinswappen wird mit Bezug zum Verein verwendet. Alle Angaben nach bestem Wissen aus öffentlichen Quellen, Stand '+FACTS.asof+'.</div></div>';
+ '<div class="card"><h2>Hinweis</h2><div class="note" style="margin:0">Dies ist eine <b>inoffizielle Fan-App</b> und steht in keiner Verbindung zum SV Gallneukirchen, zur Liga oder zum ÖFB. Das Vereinswappen wird mit Bezug zum Verein verwendet. Alle Angaben nach bestem Wissen aus öffentlichen Quellen, Stand '+FACTS.asof+'.</div></div>'+
+ '<div class="card" id="impressum"><h2>Impressum</h2><div class="note" style="margin:0;color:var(--tx);font-size:14.5px">'+
+ '<b>Offenlegung gemäß § 5 E-Commerce-Gesetz und § 25 Mediengesetz</b><br><br>'+
+ '<b>Medieninhaber und Herausgeber:</b><br>Paul Weiss Engelsberger<br>Österreich<br><br>'+
+ '<b>Kontakt:</b><br><a href="mailto:wpaul.engelsberger@gmail.com" style="color:var(--blue)">wpaul.engelsberger@gmail.com</a><br><br>'+
+ '<b>Art des Angebots:</b><br>Kostenlose, nicht kommerzielle Fan-App. Es gibt keine Werbung, keinen Verkauf und keine Einnahmen.<br><br>'+
+ '<b>Grundlegende Richtung:</b><br>Information und Unterhaltung für Fans rund um den SV Gallneukirchen.<br><br>'+
+ '<b>Rechte:</b><br>Name und Wappen des SV Gallneukirchen gehören dem Verein. Sie werden hier nur zur Kennzeichnung des Bezugs verwendet. Wenn du Rechte-Inhaber bist und etwas geändert oder entfernt haben möchtest, schreib bitte an die Kontakt-Adresse.</div></div>'+
+ '<div class="card"><h2>Datenschutz</h2><div class="note" style="margin:0;color:var(--tx);font-size:14.5px">'+
+ '<b>Deine Eingaben bleiben auf deinem Gerät.</b> Spiele, Tipps, Torzähler und Quiz-Ergebnisse werden nur im Speicher deines Browsers abgelegt und nicht an uns oder Dritte übertragen. Es gibt keine Anmeldung, keine Cookies zu Werbezwecken, keine Analyse und kein Tracking.<br><br>'+
+ 'Beim Aufruf der Seite verarbeitet der Hosting-Dienst <b>GitHub Pages</b> technische Daten wie die IP-Adresse. Darauf haben wir keinen Einfluss. Mehr dazu in der Datenschutzerklärung von GitHub.<br><br>'+
+ 'Links unter „Live“ führen zu fremden Seiten. Für deren Inhalte und Datenschutz sind deren Betreiber verantwortlich.<br><br>'+
+ '<b>Löschen:</b> Entferne die App vom Home-Bildschirm oder lösche die Website-Daten in den Safari-Einstellungen, dann sind alle deine Daten weg. Fragen zum Datenschutz: <a href="mailto:wpaul.engelsberger@gmail.com" style="color:var(--blue)">wpaul.engelsberger@gmail.com</a></div></div>';
 }
 function linksView(){
  const L=[["🏠","Offizielle Vereinsseite","vereine.oefb.at · News & Infos","https://vereine.oefb.at/SVGallneukirchen/"],["📊","Tabelle & Ergebnisse","Landesliga Ost · LigaPortal","https://ticker.ligaportal.at/mannschaft/81/sv-gallneukirchen/tabelle"],["📰","Neuigkeiten zum SVG","meinbezirk.at","https://www.meinbezirk.at/tag/sv-gallneukirchen"],["🗺️","Gallneukirchen auf der Karte","Anfahrt zum Heimspiel","https://www.google.com/maps/search/?api=1&query=SV+Gallneukirchen+Sportplatz"]];
@@ -207,6 +220,7 @@ document.addEventListener("click",function(e){
  const t=e.target.closest("[data-a]");if(!t)return;
  const d=t.dataset;
  switch(d.a){
+  case "imp":tab="club";render();setTimeout(function(){const e=$("#impressum");if(e)e.scrollIntoView()},0);break;
   case "tab":if(d.t!=="fan"||tab!=="quiz"){QS=null}tab=d.t;render();window.scrollTo(0,0);break;
   case "addg":{const o=$("#go").value.trim(),dt=$("#gd").value;if(!o||!dt){toast("Bitte Gegner und Datum eintragen");return}S.games.push({o:o,d:dt,t:$("#gt").value||"",home:$("#gh").value==="1",hs:null,as:null});save();render();toast("Spiel gespeichert");break}
   case "delg":if(confirm("Spiel löschen?")){S.games.splice(+d.i,1);save();render()}break;
